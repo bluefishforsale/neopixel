@@ -13,7 +13,7 @@ from concurrent.futures import ThreadPoolExecutor
 pixel_pin = board.D21
 
 # The number of NeoPixels
-num_pixels = 500
+num_pixels = 150
 
 # The order of the pixel colors - RGB or GRB. Some NeoPixels have red and green reversed!
 # For RGBW NeoPixels, simply change the ORDER to RGBW or GRBW.
@@ -42,5 +42,5 @@ def twinkle(fade):
 
 
 if __name__ == "__main__":
-    with neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.5, auto_write=False, pixel_order=ORDER) as pixels:
-        twinkle(1.001)
+    with neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.1, auto_write=False, pixel_order=ORDER) as pixels:
+        twinkle(1.05)

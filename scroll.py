@@ -47,16 +47,15 @@ def map_to_pix(ar, pixles):
 # top of the scrolling function
 def scroll(fade):
     global pixels
-    periodicity = 2
+    periodicity = 10
     SAMPLES = math.ceil(pixels.n / periodicity)
     SCALE = 0,255 ## Output range
 
     ## Angles in degrees for which to calculate sine
-    angles = [rescale(i,0,SAMPLES,90,360) for i in range(SAMPLES)]
-    sin_table = [int(round(rescale(s,-1,1,SCALE[0],SCALE[1]))) for s in [
-    math.sin(math.radians(a)) for a in angles
-    ]]
-    pixels = map_to_pix(sin_table * periodicity, pixels)
+    angles = [ rescale(i,0,SAMPLES,90,360, ) for i in range(SAMPLES) ]
+    sin_table = [ int(round(rescale(s,-1,1,SCALE[0],SCALE[1]))) for s in [
+        math.sin(math.radians(a)) for a in angles ]]
+    pixels = map_to_pix(sin_table * math.ceil(periodicity), pixels)
     while True:
         pixels = scroll_array(fade, pixels)
         pixels.show()
@@ -64,5 +63,5 @@ def scroll(fade):
 
 if __name__ == "__main__":
     # use with so ctrl-c kills the lights when done.
-    with neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.5, auto_write=False, pixel_order=ORDER) as pixels:
-      scroll(30)
+    with neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.1, auto_write=False, pixel_order=ORDER) as pixels:
+      scroll(1)
