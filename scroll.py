@@ -52,7 +52,7 @@ def scroll(fade):
     SCALE = 0,255 ## Output range
 
     ## Angles in degrees for which to calculate sine
-    angles = [ rescale(i,0,SAMPLES,90,360, ) for i in range(SAMPLES) ]
+    angles = [ rescale(i,0,SAMPLES,180,360, ) for i in range(SAMPLES) ]
     sin_table = [ int(round(rescale(s,-1,1,SCALE[0],SCALE[1]))) for s in [
         math.sin(math.radians(a)) for a in angles ]]
     pixels = map_to_pix(sin_table * math.ceil(periodicity), pixels)
