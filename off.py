@@ -22,12 +22,6 @@ pixels = neopixel.NeoPixel(
     pixel_pin, num_pixels, brightness=0.2, auto_write=False, pixel_order=ORDER
 )
 
-def dec_rgb(n, px):
-  rgb_minus = (n,)*3
-  new_px = map(lambda a,b: max(0, min(a-b, 255)), px, rgb_minus)
-  return tuple(new_px)
-
-
 
 if __name__ == "__main__":
   pixels.fill((0,0,0))

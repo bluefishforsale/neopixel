@@ -19,7 +19,7 @@ num_pixels = 999
 ORDER = neopixel.GRB
 
 pixels = neopixel.NeoPixel(
-    pixel_pin, num_pixels, brightness=0.6, auto_write=False, pixel_order=ORDER
+    pixel_pin, num_pixels, brightness=0.3, auto_write=False, pixel_order=ORDER
 )
 
 def dec_rgb(n, px):
@@ -30,5 +30,5 @@ def dec_rgb(n, px):
 
 
 if __name__ == "__main__":
-  pixels.fill((80, 70, 40))
+  pixels.fill((255 ,255 , 128))
   pixels.show()

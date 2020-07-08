@@ -29,17 +29,15 @@ def rescale(X,A,B,C,D,force_float=False):
 
 # moves part of an array to the end or beginning based on direction
 # preserves order of elements in the array
-def scroll_array(move, pixels):
-    if move > 0:
-        ar = pixels[move::] + pixels[:move]
-    elif move < 0:
-        ar = pixels[-move:] + pixels[:-move]
+def scroll_array(pixels):
+    move = 1
+    ar = pixels[move::] + pixels[:move]
     for i, val in enumerate(ar):
         pixels[i] = val
     return pixels
 
 def mirror_array(pivot, array):
-    bottom = array[0:pivot]
+    bottom = array[0:pivot+1]
     top = array[pivot::-1]
     full = bottom + top
     mirrored = copy.deepcopy(array)
@@ -56,7 +54,7 @@ def map_to_pix(ar, pixels):
 
 # top of the scrolling function
 def scroll(fade, pixels):
-    periodicity = 1.5
+    periodicity = 3
     SAMPLES = math.ceil(pixels.n / periodicity)
     SCALE = 0,255 ## Output range
 
@@ -68,12 +66,13 @@ def scroll(fade, pixels):
     pivot = math.floor( len(pixels)/2 )
 
     while True:
-        pixels = scroll_array(fade, pixels)
+        pixels = scroll_array(pixels)
         mirror_pixels = mirror_array(pivot, pixels)
         mirror_pixels.show()
+        time.sleep(fade)
 
 
 if __name__ == "__main__":
     # use with so ctrl-c kills the lights when done.
-    with neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.1, auto_write=False, pixel_order=ORDER) as strip:
-      scroll(1, strip)
+    with neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.5, auto_write=False, pixel_order=ORDER) as strip:
+      scroll(0.03, strip)
