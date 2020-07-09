@@ -7,18 +7,25 @@ import copy
 from random import random
 import math
 from pprint import pprint
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-b', '--brightness', default=0.5, type=float, help='how bright you is?')
+parser.add_argument('-n', '--num_pixels', default=100, type=int, help='how many led you got?')
+parser.add_argument('-s', '--speed',      default=1,   type=int, help='how fast it go?')
+parser.add_argument('-r', '--repeat',     default=3,   type=int, help='how many time repeat?')
+args = parser.parse_args()
 
 # Choose an open pin connected to the Data In of the NeoPixel strip, i.e. board.D18
 # NeoPixels must be connected to D10, D12, D18 or D21 to work.
 pixel_pin = board.D21
 
 # The number of NeoPixels
-num_pixels = 126
+num_pixels = args.num_pixels
 
 # The order of the pixel colors - RGB or GRB. Some NeoPixels have red and green reversed!
 # For RGBW NeoPixels, simply change the ORDER to RGBW or GRBW.
 ORDER = neopixel.GRB
-
 
 ## Generate sine table
 def rescale(X,A,B,C,D,force_float=False):
@@ -30,7 +37,7 @@ def rescale(X,A,B,C,D,force_float=False):
 # moves part of an array to the end or beginning based on direction
 # preserves order of elements in the array
 def scroll_array(pixels):
-    move = 1
+    move = args.speed
     ar = pixels[move::] + pixels[:move]
     for i, val in enumerate(ar):
         pixels[i] = val
@@ -54,7 +61,7 @@ def map_to_pix(ar, pixels):
 
 # top of the scrolling function
 def scroll(fade, pixels):
-    periodicity = 3
+    periodicity = args.repeat
     SAMPLES = math.ceil(pixels.n / periodicity)
     SCALE = 0,255 ## Output range
 
@@ -74,5 +81,5 @@ def scroll(fade, pixels):
 
 if __name__ == "__main__":
     # use with so ctrl-c kills the lights when done.
-    with neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.5, auto_write=False, pixel_order=ORDER) as strip:
+    with neopixel.NeoPixel(pixel_pin, num_pixels, brightness=args.brightness, auto_write=False, pixel_order=ORDER) as strip:
       scroll(0.03, strip)
