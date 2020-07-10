@@ -10,9 +10,10 @@ from pprint import pprint
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-b', '--brightness', default=0.5, type=float, help='how bright you is?')
-parser.add_argument('-n', '--num_pixels', default=100, type=int, help='how many led you got?')
-parser.add_argument('-s', '--speed',      default=0.001,   type=float, help='how fast it go?')
+parser.add_argument('-b', '--brightness', default=0.3,   type=float, help='how bright you is?')
+parser.add_argument('-n', '--num_pixels', default=100,   type=int,   help='how many led you got?')
+parser.add_argument('-s', '--speed',      default=0.001, type=float, help='how fast it go?')
+parser.add_argument('-o', '--offset',     default=0,     type=int,   help='how fast it go?')
 args = parser.parse_args()
 
 # Choose an open pin connected to the Data In of the NeoPixel strip, i.e. board.D18
@@ -47,6 +48,14 @@ def wheel(pos):
         b = int(255 - pos * 3)
     return (r, g, b) if ORDER in (neopixel.RGB, neopixel.GRB) else (r, g, b, 0)
 
+def shift_array(array, count):
+    temp = array[count::] + array[0:count]
+    shifted = copy.deepcopy(array)
+    for i, val in enumerate(temp[0:len(array)-1]):
+        shifted[i] = val
+    return shifted
+
+
 def mirror_array(pivot, array):
     bottom = array[0:pivot]
     top = array[pivot::-1]
@@ -64,7 +73,11 @@ def rainbow_cycle(wait):
                 pixel_index = (i * 256 // num_pixels) + j
                 pixels[i] = wheel(pixel_index & 255)
             mirror_pixels = mirror_array(pivot, pixels)
-            mirror_pixels.show()
+            if abs(args.offset) > 0:
+                shift_pixels = shift_array(mirror_pixels, args.offset)
+                shift_pixels.show()
+            else:
+                mirror_pixels.show()
             time.sleep(wait)
 
 if __name__ == "__main__":
